@@ -27,6 +27,9 @@ class Lift(Queue):
         return super(Lift, self).process(elements)
 
     def callback(self, clusters, prefix):
+        print(clusters)
+        print(prefix)
+
         if not prefix:
             # No iteration space to be lifted from
             return clusters
@@ -59,17 +62,20 @@ class Lift(Queue):
                 processed.append(c)
                 continue
 
+            # import pdb; pdb.set_trace()
             # Contract iteration and data spaces for the lifted Cluster
-            key = lambda d: d not in hope_invariant
-            ispace = c.ispace.project(key).reset()
-            dspace = c.dspace.project(key).reset()
+            # key = lambda d: d not in hope_invariant
+            # ispace = c.ispace.project(key).reset()
+            # dspace = c.dspace.project(key).reset()
 
             # Some properties need to be dropped
-            properties = {d: v for d, v in c.properties.items() if key(d)}
-            properties = {d: v - {TILABLE} for d, v in properties.items()}
+            # properties = {d: v for d, v in c.properties.items() if key(d)}
+            # properties = {d: v - {TILABLE} for d, v in properties.items()}
 
-            lifted.append(c.rebuild(ispace=ispace, dspace=dspace, properties=properties))
+            # lifted.append(c.rebuild(ispace=ispace, dspace=dspace, properties=properties))
+            processed.append(c)
 
+        import pdb; pdb.set_trace()
         return lifted + processed
 
 

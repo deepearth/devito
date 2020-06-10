@@ -162,6 +162,7 @@ class TestSubdomains(object):
         """
         Test that a set of subdomains are iterated upon correctly.
         """
+        import pdb; pdb.set_trace()
 
         n_domains = 10
 
