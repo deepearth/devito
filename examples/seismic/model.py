@@ -13,7 +13,7 @@ __all__ = ['SeismicModel', 'Model', 'ModelElastic',
 
 def initialize_damp(damp, nbl, spacing, abc_type="damp", fs=False):
     """
-    Initialise damping field with an absorbing boundary layer.
+    Initialize damping field with an absorbing boundary layer.
 
     Parameters
     ----------
@@ -111,6 +111,7 @@ class GenericModel(object):
             subdomains = subdomains + (fsdomain,)
             origin_pml[-1] = origin[-1]
             shape_pml[-1] -= self.nbl
+
         # Origin of the computational domain with boundary to inject/interpolate
         # at the correct index
         if grid is None:
