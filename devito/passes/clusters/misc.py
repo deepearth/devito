@@ -40,6 +40,8 @@ class Lift(Queue):
         processed = []
         for n, c in enumerate(clusters):
             # Increments prevent lifting
+            import pdb; pdb.set_trace()
+
             if c.has_increments:
                 processed.append(c)
                 continue
