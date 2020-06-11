@@ -62,20 +62,30 @@ class Lift(Queue):
                 processed.append(c)
                 continue
 
+
+            import pdb; pdb.set_trace()
+            # Prevent lifting FOR ISSUE 1332
+            temp_impacted = list(impacted)
+            import pdb; pdb.set_trace()
+
+            sboundwrites = {f for f in c.scope.writes if f.is_Symbol}
+            if any(swrites & set(i.scope.reads) for i in impacted):
+                processed.append(c)
+                continue
+
             # import pdb; pdb.set_trace()
             # Contract iteration and data spaces for the lifted Cluster
-            # key = lambda d: d not in hope_invariant
-            # ispace = c.ispace.project(key).reset()
-            # dspace = c.dspace.project(key).reset()
+            key = lambda d: d not in hope_invariant
+            ispace = c.ispace.project(key).reset()
+            dspace = c.dspace.project(key).reset()
 
             # Some properties need to be dropped
-            # properties = {d: v for d, v in c.properties.items() if key(d)}
-            # properties = {d: v - {TILABLE} for d, v in properties.items()}
+            properties = {d: v for d, v in c.properties.items() if key(d)}
+            properties = {d: v - {TILABLE} for d, v in properties.items()}
 
-            # lifted.append(c.rebuild(ispace=ispace, dspace=dspace, properties=properties))
-            processed.append(c)
+            lifted.append(c.rebuild(ispace=ispace, dspace=dspace, properties=properties))
+            # processed.append(c)
 
-        import pdb; pdb.set_trace()
         return lifted + processed
 
 
