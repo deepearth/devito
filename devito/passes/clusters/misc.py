@@ -27,8 +27,6 @@ class Lift(Queue):
         return super(Lift, self).process(elements)
 
     def callback(self, clusters, prefix):
-        print(clusters)
-        print(prefix)
 
         if not prefix:
             # No iteration space to be lifted from
@@ -39,9 +37,8 @@ class Lift(Queue):
         lifted = []
         processed = []
         for n, c in enumerate(clusters):
-            # Increments prevent lifting
-            import pdb; pdb.set_trace()
 
+            # Increments prevent lifting
             if c.has_increments:
                 processed.append(c)
                 continue
@@ -64,18 +61,17 @@ class Lift(Queue):
                 processed.append(c)
                 continue
 
-
-            import pdb; pdb.set_trace()
-            # Prevent lifting FOR ISSUE 1332
-            temp_impacted = list(impacted)
-            import pdb; pdb.set_trace()
-
-            sboundwrites = {f for f in c.scope.writes if f.is_Symbol}
-            if any(swrites & set(i.scope.reads) for i in impacted):
-                processed.append(c)
+            # Prevent lifting when symbobisbas prevents lifting
+            flag = 0
+            for imp in impacted:
+                if any(swrites & set(i.symbolic_max & i.symbolic_max
+                       for i in imp.ispace.dimensions)):
+                    processed.append(c)
+                    flag = 1
+                    continue
+            if flag == 1:
                 continue
 
-            # import pdb; pdb.set_trace()
             # Contract iteration and data spaces for the lifted Cluster
             key = lambda d: d not in hope_invariant
             ispace = c.ispace.project(key).reset()
@@ -86,7 +82,6 @@ class Lift(Queue):
             properties = {d: v - {TILABLE} for d, v in properties.items()}
 
             lifted.append(c.rebuild(ispace=ispace, dspace=dspace, properties=properties))
-            # processed.append(c)
 
         return lifted + processed
 

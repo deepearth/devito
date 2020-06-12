@@ -3,7 +3,7 @@ import numpy as np
 from math import floor
 
 from devito import (Grid, Function, TimeFunction, Eq, solve, Operator, SubDomain,
-                    SubDomainSet, Dimension)
+                    SubDomainSet, Dimension, TimeDimension, Inc)
 from devito.tools import timed_region
 
 
@@ -162,7 +162,7 @@ class TestSubdomains(object):
         """
         Test that a set of subdomains are iterated upon correctly.
         """
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
 
         n_domains = 10
 
